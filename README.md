@@ -40,6 +40,7 @@ sudo pacman -S vtx      # install a package
 ./scripts/build.sh              # build all packages
 ./scripts/build.sh vtx          # build only vtx
 GPGKEY=<keyid> ./scripts/build.sh   # build and sign
+./scripts/check-deps.sh --local # can everything be installed on a clean system?
 ./scripts/publish.sh            # upload to GitHub (needs gh, logged in)
 ```
 

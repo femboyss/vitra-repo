@@ -1,7 +1,7 @@
 # (c) 2026 34 & Claude
 # Maintainer: 34 <femboyss at users dot noreply dot github dot com>
 pkgname=vitrainstall
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=1
 pkgdesc="The graphical Vitra installer (Qt/QML interface, archinstall underneath)"
 arch=('any')

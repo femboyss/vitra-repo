@@ -1,0 +1,26 @@
+# (c) 2026 34 & Claude
+# Maintainer: 34 <femboyss at users dot noreply dot github dot com>
+pkgname=vtx
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="The Vitra package manager: [vitra] repo, Arch repos and the AUR in one command"
+arch=('any')
+url="https://github.com/femboyss/vtx"
+license=('GPL-3.0-or-later')
+depends=('bash' 'pacman' 'curl' 'jq' 'git')
+optdepends=('base-devel: build AUR packages'
+            'pacman-contrib: vtx clean removes old package versions'
+            'less: read PKGBUILDs before building')
+makedepends=('git')
+source=("git+https://github.com/femboyss/vtx.git#tag=v$pkgver")
+sha256sums=('SKIP')
+
+check() {
+    cd "$pkgname"
+    make test
+}
+
+package() {
+    cd "$pkgname"
+    make DESTDIR="$pkgdir" PREFIX=/usr install
+}

@@ -9,7 +9,7 @@
 # /usr/share/vitra/deploy/glassy-shell.sh -> install.sh --deploy
 #
 # _branch: "debug" while testing, "main" for releases
-_branch=debug
+_branch=main
 pkgbase=claudes-glassy
 pkgname=(glassy-shell glassy-wallpapers)
 pkgver=2.0.r0.g0000000

@@ -1,0 +1,84 @@
+# (c) 2026 34 & Claude
+# Maintainer: 34 <femboyss at users dot noreply dot github dot com>
+#
+# claudes-glassy for Vitra, split into components:
+#   glassy-shell       the Quickshell shell (illogical-impulse + Glassy), configs, `glassy`
+#   glassy-wallpapers  the bundled wallpapers
+#
+# The per-user part (copying into ~/.config) is done by vtx after install/update:
+# /usr/share/vitra/deploy/glassy-shell.sh -> install.sh --deploy
+#
+# _branch: "debug" while testing, "main" for releases
+_branch=debug
+pkgbase=claudes-glassy
+pkgname=(glassy-shell glassy-wallpapers)
+pkgver=2.0.r0.g0000000
+pkgrel=1
+arch=('any')
+url="https://github.com/femboyss/claudes-glassy"
+license=('GPL-3.0-or-later')
+makedepends=('git')
+source=("$pkgbase::git+https://github.com/femboyss/claudes-glassy.git#branch=$_branch")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$pkgbase"
+    printf '2.0.r%s.g%s' "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+check() {
+    cd "$pkgbase"
+    bash -n install.sh
+    bash -n bin/glassy
+    bash -n doctor.sh
+}
+
+package_glassy-shell() {
+    pkgdesc="Glassy desktop shell for Vitra: Hyprland + Quickshell (illogical-impulse) in the glassy look"
+    depends=(
+        'glassy-wallpapers'
+        # end-4 / illogical-impulse dependency packages
+        'illogical-impulse-audio' 'illogical-impulse-backlight' 'illogical-impulse-basic'
+        'illogical-impulse-bibata-modern-classic-bin' 'illogical-impulse-fonts-themes'
+        'illogical-impulse-hyprland' 'illogical-impulse-kde' 'illogical-impulse-microtex-git'
+        'illogical-impulse-portal' 'illogical-impulse-python' 'illogical-impulse-quickshell-git'
+        'illogical-impulse-screencapture' 'illogical-impulse-toolkit' 'illogical-impulse-widgets'
+        # extra packages of claudes-glassy (install.sh EXTRA_PKGS)
+        'git' 'jq' 'python' 'libnotify' 'xdg-utils'
+        'plasma-integration' 'qt6ct' 'papirus-icon-theme' 'inter-font' 'ttf-jetbrains-mono-nerd'
+        'bluez' 'bluez-utils' 'grim'
+        'darkly-bin'
+    )
+    optdepends=('vtx: sets up glassy in your home folder after every update')
+    conflicts=('glassy-shell-git')
+
+    cd "$pkgbase"
+    local dst="$pkgdir/usr/share/glassy"
+    install -d "$dst" "$dst/deps"
+    cp -a install.sh doctor.sh restore.sh config assets "$dst/"
+    cp -a deps/uv "$dst/deps/"
+    install -Dm755 bin/glassy "$dst/bin/glassy"
+    # install.sh copies wallpapers from $HERE/wallpapers
+    ln -s /usr/share/backgrounds/glassy "$dst/wallpapers"
+    git rev-parse --short HEAD >"$dst/VERSION-COMMIT"
+
+    install -Dm755 bin/glassy "$pkgdir/usr/bin/glassy"
+
+    # per-user setup step, run by vtx as the normal user
+    install -Dm755 /dev/stdin "$pkgdir/usr/share/vitra/deploy/glassy-shell.sh" <<'HOOK'
+#!/usr/bin/env bash
+# glassy-shell: copy the shell and configs into ~/.config (install | upgrade | fix)
+exec bash /usr/share/glassy/install.sh --deploy "${1:-upgrade}"
+HOOK
+
+    install -Dm644 LICENSE-illogical-impulse "$pkgdir/usr/share/licenses/glassy-shell/LICENSE"
+    install -Dm644 README.md "$pkgdir/usr/share/doc/glassy-shell/README.md"
+}
+
+package_glassy-wallpapers() {
+    pkgdesc="Wallpapers of the Vitra glassy desktop"
+    cd "$pkgbase"
+    install -d "$pkgdir/usr/share/backgrounds/glassy"
+    install -m644 wallpapers/* "$pkgdir/usr/share/backgrounds/glassy/"
+    install -Dm644 LICENSE-illogical-impulse "$pkgdir/usr/share/licenses/glassy-wallpapers/LICENSE"
+}

@@ -1,7 +1,7 @@
 # (c) 2026 34 & Claude
 # Maintainer: 34 <femboyss at users dot noreply dot github dot com>
 pkgname=vtx
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 pkgdesc="The Vitra package manager: [vitra] repo, Arch repos and the AUR in one command"
 arch=('any')

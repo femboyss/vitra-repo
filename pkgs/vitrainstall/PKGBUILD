@@ -1,0 +1,23 @@
+# (c) 2026 34 & Claude
+# Maintainer: 34 <femboyss at users dot noreply dot github dot com>
+pkgname=vitrainstall
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="The graphical Vitra installer (Qt/QML interface, archinstall underneath)"
+arch=('any')
+url="https://github.com/femboyss/vitrainstall"
+license=('GPL-3.0-or-later')
+depends=('python' 'pyside6' 'archinstall' 'arch-install-scripts' 'util-linux' 'pciutils' 'polkit')
+makedepends=('git')
+source=("git+https://github.com/femboyss/vitrainstall.git#tag=v$pkgver")
+sha256sums=('SKIP')
+
+check() {
+    cd "$pkgname"
+    make test
+}
+
+package() {
+    cd "$pkgname"
+    make DESTDIR="$pkgdir" PREFIX=/usr install
+}

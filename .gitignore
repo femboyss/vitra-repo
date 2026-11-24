@@ -5,3 +5,5 @@ build/
 pkgs/*/src/
 pkgs/*/pkg/
 pkgs/*/*.tar.*
+# git sources and build dirs that makepkg puts next to a PKGBUILD
+pkgs/*/*/

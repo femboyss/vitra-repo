@@ -1,0 +1,7 @@
+out/
+build/
+*.pkg.tar.zst
+*.pkg.tar.zst.sig
+pkgs/*/src/
+pkgs/*/pkg/
+pkgs/*/*.tar.*

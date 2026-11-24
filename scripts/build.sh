@@ -32,6 +32,8 @@ for p in "${pkgs[@]}"; do
   [[ -f "$dir/PKGBUILD" ]] || { echo "!! $p: kein PKGBUILD"; exit 1; }
   echo ":: Baue $p"
   (cd "$dir" && PKGDEST="$OUT" makepkg -sf --noconfirm --cleanbuild "${sign_args[@]}")
+  # makepkg writes the new pkgver of git packages back into the PKGBUILD: undo that
+  git -C "$ROOT" checkout -q -- "pkgs/$p/PKGBUILD" 2>/dev/null || true
 done
 
 echo ":: Erzeuge Datenbank"

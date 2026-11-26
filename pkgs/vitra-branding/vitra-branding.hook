@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = filesystem
+Target = vitra-branding
+
+[Action]
+Description = Restoring the Vitra branding...
+When = PostTransaction
+Exec = /usr/bin/vitra-branding

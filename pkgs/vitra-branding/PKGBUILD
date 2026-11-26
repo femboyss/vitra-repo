@@ -1,0 +1,47 @@
+# (c) 2026 34 & Claude
+# Maintainer: 34 <femboyss at users dot noreply dot github dot com>
+pkgname=vitra-branding
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Vitra logo, icons, fastfetch logo and os-release branding"
+arch=('any')
+url="https://github.com/femboyss/vitra-repo"
+license=('GPL-3.0-or-later')
+depends=('bash' 'filesystem')
+optdepends=('fastfetch: shows the Vitra logo')
+install=vitra-branding.install
+source=(vitra-logo.svg vitra-logo-tile.svg
+        vitra-logo-16.png vitra-logo-32.png vitra-logo-48.png vitra-logo-64.png
+        vitra-logo-128.png vitra-logo-256.png vitra-logo-512.png
+        fastfetch-vitra.txt fastfetch-vitra_small.txt fastfetch-config.jsonc
+        vitra-branding vitra-branding.hook)
+sha256sums=('8b3fc646294e7615865105fe99e1a0bf144d797765717e080d92b8f1174aeb4c'
+            '04b5e09663c12da7c42fcb97c20059fc7862e732b6967dddbff841839bf59821'
+            '8ba831ca22791d2abe1600ad00be76d0776dd7af884a2ca7a95b1fdbec0455fb'
+            'd8a9a1a27743bcd68b8515b810add2f02118f7e7b2e7540e992dc587d56d65e7'
+            'f22d81e8348d81a027a1e33c4b0f3b8dc8ead12fe4e6f57249b5d75a5297b1cb'
+            '20480dab0c8f04e1118d82dc6770858439b3ec98e490250c481cf5ed5658852e'
+            '0bd2a764f263676eab46cc8a5b23c63a79e4e1882b5fd11dc3a53e3b9512116c'
+            '035ce75c24629b499b2748f6fa75ded68c6ba541dedde7c5c24eaf13cf8669f0'
+            '5a08efbe9b412ab24b3ac5c65869147fbcbaac07d251e605d5f58d157bf45981'
+            'e2d2f3aa3ac2277b32c7f41507b41783458a86c9821d3c4ccc5cbb07195480ad'
+            'b5e612fc6631b32ebd18622ca1eb106d7b6661dea73a701e1e64e7cce48129fb'
+            '289dfe9345c191d6cd090da43c5e79fdda8b7e311cbfee8679e9af31f14a95a3'
+            '849fb9a50d409d74d17ba4be43fde788d1e2275957c10e94378e0567074cc2e8'
+            'f3f2880b13fde922aa869946c3dd2a8dc3ff51cb622210388c600490fcc2d58c')
+
+package() {
+    install -Dm644 vitra-logo.svg      "$pkgdir/usr/share/icons/hicolor/scalable/apps/vitra-logo.svg"
+    install -Dm644 vitra-logo-tile.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/vitra.svg"
+    install -Dm644 vitra-logo.svg      "$pkgdir/usr/share/pixmaps/vitra-logo.svg"
+    install -Dm644 vitra-logo-tile.svg "$pkgdir/usr/share/pixmaps/vitra-logo-tile.svg"
+    install -Dm644 vitra-logo-512.png  "$pkgdir/usr/share/pixmaps/vitra-logo.png"
+    for s in 16 32 48 64 128 256 512; do
+        install -Dm644 "vitra-logo-$s.png" "$pkgdir/usr/share/icons/hicolor/${s}x${s}/apps/vitra-logo.png"
+    done
+    install -Dm644 fastfetch-vitra.txt       "$pkgdir/usr/share/fastfetch/logos/vitra.txt"
+    install -Dm644 fastfetch-vitra_small.txt "$pkgdir/usr/share/fastfetch/logos/vitra_small.txt"
+    install -Dm644 fastfetch-config.jsonc    "$pkgdir/etc/xdg/fastfetch/config.jsonc"
+    install -Dm755 vitra-branding            "$pkgdir/usr/bin/vitra-branding"
+    install -Dm644 vitra-branding.hook       "$pkgdir/usr/share/libalpm/hooks/vitra-branding.hook"
+}

@@ -1,0 +1,20 @@
+#!/bin/bash
+# vitra-branding: makes the system say "Vitra" (os-release, issue)
+# Runs on install and after every update of "filesystem", which would put "Arch Linux" back.
+# (c) 2026 34 & Claude - GPL-3.0-or-later
+set -e
+rm -f /etc/os-release
+cat > /etc/os-release <<'OS'
+NAME="Vitra"
+PRETTY_NAME="Vitra"
+ID=vitra
+ID_LIKE=arch
+BUILD_ID=rolling
+ANSI_COLOR="38;2;225;40;133"
+HOME_URL="https://femboyss.github.io/vitra-web"
+DOCUMENTATION_URL="https://github.com/femboyss/vitra-iso"
+SUPPORT_URL="https://github.com/femboyss/vitra-iso/issues"
+BUG_REPORT_URL="https://github.com/femboyss/vitra-iso/issues"
+LOGO=vitra-logo
+OS
+printf '\n  \\e[38;2;225;40;133mVitra\\e[0m  \\r  (\\l)\n\n' > /etc/issue

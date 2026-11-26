@@ -33,10 +33,16 @@ for p in "${pkgs[@]}"; do
   echo ":: Baue $p"
   # downloads and build folders go to build/ (ignored by git), never into pkgs/
   mkdir -p "$ROOT/build/sources" "$ROOT/build/work"
+  # was the PKGBUILD already changed by hand (new pkgver not committed yet)? then keep it
+  clean=0
+  git -C "$ROOT" diff --quiet -- "pkgs/$p/PKGBUILD" 2>/dev/null && clean=1
   (cd "$dir" && PKGDEST="$OUT" SRCDEST="$ROOT/build/sources" BUILDDIR="$ROOT/build/work" \
       makepkg -sf --noconfirm --cleanbuild "${sign_args[@]}")
-  # makepkg writes the new pkgver of git packages back into the PKGBUILD: undo that
-  git -C "$ROOT" checkout -q -- "pkgs/$p/PKGBUILD" 2>/dev/null || true
+  # makepkg writes the new pkgver of git packages back into the PKGBUILD: undo that,
+  # but never throw away a change that was there before the build
+  if (( clean )); then
+    git -C "$ROOT" checkout -q -- "pkgs/$p/PKGBUILD" 2>/dev/null || true
+  fi
 done
 
 echo ":: Erzeuge Datenbank"
